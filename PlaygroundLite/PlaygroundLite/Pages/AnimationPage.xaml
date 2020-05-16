@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlaygroundLite.Pages.AnimationPage"
+             xmlns:magic="clr-namespace:MagicGradients;assembly=MagicGradients"
+             xmlns:anim="clr-namespace:MagicGradients.Animation;assembly=MagicGradients">
+    <StackLayout>
+        <magic:GradientView VerticalOptions="FillAndExpand">
+            <magic:GradientView.Animation>
+                <anim:ColorAnimation Target="{x:Reference RedStop}" TargetProperty="magic:GradientStop.Color" 
+                                     From="Red" To="Blue" Duration="3000" RepeatForever="True" />
+            </magic:GradientView.Animation>
+            <magic:LinearGradient>
+                <!--<magic:LinearGradient.Animation>
+                    <anim:DoubleAnimation TargetProperty="magic:LinearGradient.Angle" 
+                                          From="0" To="360" Duration="3000" RepeatForever="True" />
+                </magic:LinearGradient.Animation>-->
+                <magic:GradientStop Color="Yellow" />
+                <magic:GradientStop Color="Red" x:Name="RedStop">
+                    <!--<magic:GradientStop.Animation>
+                        <anim:ColorAnimation TargetProperty="magic:GradientStop.Color" 
+                                             From="Red" To="Blue" Duration="3000" RepeatForever="True" />
+                    </magic:GradientStop.Animation>-->
+                </magic:GradientStop>
+                <!--<magic:GradientStop Color="Yellow" />-->
+            </magic:LinearGradient>
+        </magic:GradientView>
+    </StackLayout>
+</ContentPage>

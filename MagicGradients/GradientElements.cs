@@ -83,5 +83,13 @@ namespace MagicGradients
                 BindableObject.SetInheritedBindingContext(item, bindingContext);
             }
         }
+
+        internal void BeginAnimation(VisualElement animator)
+        {
+            foreach (var item in Items)
+            {
+                item.BeginAnimation(animator);
+            }
+        }
     }
 }

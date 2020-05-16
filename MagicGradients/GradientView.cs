@@ -1,3 +1,4 @@
+using MagicGradients.Animation;
 using MagicGradients.Renderers;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
@@ -22,6 +23,17 @@ namespace MagicGradients
             set => this.SetValue(GradientSourceProperty, value);
         }
 
+        private GradientAnimation _animation;
+        public GradientAnimation Animation
+        {
+            get => _animation;
+            set
+            {
+                _animation = value;
+                _animation.AttachTo(this);
+            }
+        }
+
         static void OnGradientSourceChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var gradientView = (GradientView)bindable;
@@ -33,10 +45,18 @@ namespace MagicGradients
 
             if (newValue != null)
             {
-                ((GradientElement)newValue).Parent = gradientView;
+                var element = (GradientElement)newValue;
+                element.Parent = gradientView;
+                gradientView.BeginAnimation();
             }
 
             gradientView.InvalidateSurface();
+        }
+
+        public void BeginAnimation()
+        {
+            Animation?.Begin(this);
+            ((GradientElement)GradientSource)?.BeginAnimation(this);
         }
 
         protected override void OnBindingContextChanged()
@@ -75,5 +95,37 @@ namespace MagicGradients
         {
             InvalidateSurface();
         }
+
+        //public static readonly BindableProperty AnimationProperty =
+        //    BindableProperty.CreateAttached("Animation", typeof(GradientAnimation), typeof(Animator), null, propertyChanged: OnAnimationChanged);
+
+        //public static GradientAnimation GetAnimation(BindableObject view)
+        //{
+        //    return (GradientAnimation)view.GetValue(AnimationProperty);
+        //}
+
+        //public static void SetAnimation(BindableObject view, GradientAnimation value)
+        //{
+        //    view.SetValue(AnimationProperty, value);
+        //}
+
+        //private static void OnAnimationChanged(BindableObject bindable, object oldvalue, object newvalue)
+        //{
+        //    if (oldvalue != null)
+        //    {
+        //        ((GradientAnimation)oldvalue).Target = null;
+        //        ((GradientAnimation)oldvalue).Animator = null;
+        //    }
+
+        //    if (newvalue != null)
+        //    {
+        //        ((GradientAnimation)oldvalue).Target = (GradientElement)bindable;
+        //        //((GradientAnimation)oldvalue).Animator = this;
+        //        //((GradientAnimation)newvalue).Begin();
+
+        //        //((GradientAnimation)newvalue).Target = (GradientElement)bindable;
+        //        //((GradientAnimation)newvalue).Begin();
+        //    }
+        //}
     }
 }
