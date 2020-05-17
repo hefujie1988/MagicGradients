@@ -7,15 +7,19 @@
     <StackLayout>
         <magic:GradientView VerticalOptions="FillAndExpand">
             <magic:GradientView.Animation>
-                <anim:ColorAnimation Target="{x:Reference RedStop}" TargetProperty="magic:GradientStop.Color" 
-                                     From="Red" To="Blue" Duration="3000" RepeatForever="True" />
+                <anim:Storyboard Duration="3000" RepeatForever="True">
+                    <anim:ColorAnimation Target="{x:Reference YellowStop}" TargetProperty="magic:GradientStop.Color" 
+                                         From="Yellow" To="Red" anim:Storyboard.BeginAt="0" anim:Storyboard.FinishAt="1" />
+                    <anim:ColorAnimation Target="{x:Reference RedStop}" TargetProperty="magic:GradientStop.Color" 
+                                         From="Red" To="Blue" anim:Storyboard.BeginAt="0" anim:Storyboard.FinishAt="1" />
+                </anim:Storyboard>
             </magic:GradientView.Animation>
             <magic:LinearGradient>
                 <!--<magic:LinearGradient.Animation>
                     <anim:DoubleAnimation TargetProperty="magic:LinearGradient.Angle" 
                                           From="0" To="360" Duration="3000" RepeatForever="True" />
                 </magic:LinearGradient.Animation>-->
-                <magic:GradientStop Color="Yellow" />
+                <magic:GradientStop Color="Yellow" x:Name="YellowStop" />
                 <magic:GradientStop Color="Red" x:Name="RedStop">
                     <!--<magic:GradientStop.Animation>
                         <anim:ColorAnimation TargetProperty="magic:GradientStop.Color" 

@@ -13,8 +13,6 @@ namespace MagicGradients.Animation
         public BindableObject Target { get; set; } = default;
         public VisualElement Animator { get; private set; } = default;
 
-        protected abstract Task BeginAnimation();
-
         public async Task Begin(VisualElement animator)
         {
             Animator = animator;
@@ -24,6 +22,8 @@ namespace MagicGradients.Animation
                 throw new NullReferenceException("Null Target property.");
             }
 
+            OnPrepare();
+
             if (Delay > 0)
             {
                 await Task.Delay(Delay);
@@ -32,10 +32,32 @@ namespace MagicGradients.Animation
             await BeginAnimation();
         }
 
+        protected virtual Task BeginAnimation()
+        {
+            var taskCompletionSource = new TaskCompletionSource<bool>();
+
+            Animator.Animate(Guid.NewGuid().ToString(), OnAnimate(),
+                length: Duration,
+                easing: EasingHelper.GetEasing(Easing),
+                finished: (v, c) =>
+                {
+                    if (RepeatForever)
+                        OnReset();
+                    else
+                        taskCompletionSource.SetResult(c);
+                },
+                repeat: () => RepeatForever);
+
+            return taskCompletionSource.Task;
+        }
+        
+        public virtual void OnPrepare() { }
+        public abstract Xamarin.Forms.Animation OnAnimate();
+        public virtual void OnReset() { }
+
         public void End()
         {
             ViewExtensions.CancelAnimations(Animator);
-            //AnimationExtensions.AbortAnimation()
         }
 
         public void AttachTo(BindableObject parent)

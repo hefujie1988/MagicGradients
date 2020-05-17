@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace MagicGradients.Animation
@@ -10,7 +9,7 @@ namespace MagicGradients.Animation
         public TValue To { get; set; } = default;
         public BindableProperty TargetProperty { get; set; } = default;
 
-        protected override Task BeginAnimation()
+        public override void OnPrepare()
         {
             if (TargetProperty == null)
             {
@@ -18,30 +17,22 @@ namespace MagicGradients.Animation
             }
 
             SetDefaultFrom((TValue)Target.GetValue(TargetProperty));
-
-            var taskCompletionSource = new TaskCompletionSource<bool>();
-            var animation = new Xamarin.Forms.Animation(OnAnimate);
-
-            Animator.Animate(TargetProperty.PropertyName, animation,
-                length: Duration,
-                easing: EasingHelper.GetEasing(Easing),
-                finished: (v, c) =>
-                {
-                    if (RepeatForever)
-                        Target.SetValue(TargetProperty, From);
-                    else
-                        taskCompletionSource.SetResult(c);
-                },
-                repeat: () => RepeatForever);
-
-            return taskCompletionSource.Task;
         }
 
-        protected virtual void SetDefaultFrom(TValue value)
+        public override void OnReset()
+        {
+            // Reset
+            //Target.SetValue(TargetProperty, From);
+
+            // Revert
+            var tmp = From;
+            From = To;
+            To = tmp;
+        }
+
+        private void SetDefaultFrom(TValue value)
         {
             From = From.Equals(default(TValue)) ? value : From;
         }
-
-        protected abstract void OnAnimate(double progress);
     }
 }
