@@ -3,14 +3,16 @@ using Xamarin.Forms;
 
 namespace MagicGradients.Animation
 {
-    public abstract class PropertyAnimation<TValue> : GradientAnimation
+    public abstract class PropertyAnimation<TValue> : Timeline
     {
         public TValue From { get; set; } = default;
         public TValue To { get; set; } = default;
         public BindableProperty TargetProperty { get; set; } = default;
 
-        public override void OnPrepare()
+        public override void OnBegin()
         {
+            base.OnBegin();
+
             if (TargetProperty == null)
             {
                 throw new NullReferenceException("Null Target property.");
@@ -19,15 +21,14 @@ namespace MagicGradients.Animation
             SetDefaultFrom((TValue)Target.GetValue(TargetProperty));
         }
 
-        public override void OnReset()
+        public override void OnRepeat()
         {
-            // Reset
-            //Target.SetValue(TargetProperty, From);
-
-            // Revert
-            var tmp = From;
-            From = To;
-            To = tmp;
+            if (AutoReverse)
+            {
+                var tmp = From;
+                From = To;
+                To = tmp;
+            }
         }
 
         private void SetDefaultFrom(TValue value)

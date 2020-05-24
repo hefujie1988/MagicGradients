@@ -42,12 +42,6 @@ namespace MagicGradients
             Stops.SetInheritedBindingContext(BindingContext);
         }
 
-        public override void BeginAnimation(VisualElement animator)
-        {
-            base.BeginAnimation(animator);
-            Stops.BeginAnimation(animator);
-        }
-
         public abstract void Render(RenderContext context);
 
         public virtual void Measure(int width, int height)

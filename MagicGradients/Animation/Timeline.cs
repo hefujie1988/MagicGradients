@@ -4,11 +4,12 @@ using Xamarin.Forms;
 
 namespace MagicGradients.Animation
 {
-    public abstract class GradientAnimation : BindableObject
+    public abstract class Timeline : BindableObject
     {
-        public uint Duration { get; set; } = 1000;
+        public uint Duration { get; set; } = 0;
         public int Delay { get; set; } = 0;
-        public bool RepeatForever { get; set; } = false;
+        public RepeatBehavior RepeatBehavior { get; set; }
+        public bool AutoReverse { get; set; }
         public EasingType Easing { get; set; } = EasingType.Linear;
         public BindableObject Target { get; set; } = default;
         public VisualElement Animator { get; private set; } = default;
@@ -16,13 +17,7 @@ namespace MagicGradients.Animation
         public async Task Begin(VisualElement animator)
         {
             Animator = animator;
-
-            if (Target == null)
-            {
-                throw new NullReferenceException("Null Target property.");
-            }
-
-            OnPrepare();
+            OnBegin();
 
             if (Delay > 0)
             {
@@ -41,31 +36,30 @@ namespace MagicGradients.Animation
                 easing: EasingHelper.GetEasing(Easing),
                 finished: (v, c) =>
                 {
-                    if (RepeatForever)
-                        OnReset();
+                    if (RepeatBehavior == RepeatBehavior.Forever)
+                        OnRepeat();
                     else
                         taskCompletionSource.SetResult(c);
                 },
-                repeat: () => RepeatForever);
+                repeat: () => RepeatBehavior == RepeatBehavior.Forever);
 
             return taskCompletionSource.Task;
         }
-        
-        public virtual void OnPrepare() { }
+
+        public virtual void OnBegin()
+        {
+            if (Target == null)
+            {
+                throw new NullReferenceException("Null Target property.");
+            }
+        }
+
+        public virtual void OnRepeat() { }
         public abstract Xamarin.Forms.Animation OnAnimate();
-        public virtual void OnReset() { }
 
         public void End()
         {
             ViewExtensions.CancelAnimations(Animator);
-        }
-
-        public void AttachTo(BindableObject parent)
-        {
-            if (Target == null)
-            {
-                Target = parent;
-            }
         }
     }
 }

@@ -30,11 +30,5 @@ namespace MagicGradients
             base.OnBindingContextChanged();
             Gradients.SetInheritedBindingContext(BindingContext);
         }
-
-        public override void BeginAnimation(VisualElement animator)
-        {
-            base.BeginAnimation(animator);
-            Gradients.BeginAnimation(animator);
-        }
     }
 }

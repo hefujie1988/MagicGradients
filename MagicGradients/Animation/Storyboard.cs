@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace MagicGradients.Animation
 {
     [ContentProperty(nameof(Animations))]
-    public class Storyboard : GradientAnimation
+    public class Storyboard : Timeline
     {
         public static readonly BindableProperty BeginAtProperty =
             BindableProperty.CreateAttached("BeginAt", typeof(double), typeof(Storyboard), 0d);
@@ -18,14 +19,16 @@ namespace MagicGradients.Animation
         public static double GetFinishAt(BindableObject view) => (double)view.GetValue(FinishAtProperty);
         public static void SetFinishAt(BindableObject view, double value) => view.SetValue(FinishAtProperty, value);
 
-        public List<GradientAnimation> Animations { get; set; } = new List<GradientAnimation>();
+        public List<Timeline> Animations { get; set; } = new List<Timeline>();
 
-        public override void OnPrepare()
+        public override void OnBegin()
         {
             foreach (var anim in Animations)
             {
                 if (anim.Target == null)
                     anim.Target = Target;
+
+                anim.OnBegin();
             }
         }
 
@@ -37,17 +40,22 @@ namespace MagicGradients.Animation
             {
                 var beginAt = GetBeginAt(anim);
                 var finishAt = GetFinishAt(anim);
+
+                if (anim.Duration > 0)
+                {
+                    finishAt = Math.Min(finishAt, beginAt + (double)anim.Duration / Duration);
+                }
                 animation.Add(beginAt, finishAt, anim.OnAnimate());
             }
 
             return animation;
         }
 
-        public override void OnReset()
+        public override void OnRepeat()
         {
             foreach (var anim in Animations)
             {
-                anim.OnReset();
+                anim.OnRepeat();
             }
         }
     }
