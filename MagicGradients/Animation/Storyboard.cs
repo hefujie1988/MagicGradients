@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Xamarin.Forms;
 
 namespace MagicGradients.Animation
@@ -44,19 +45,12 @@ namespace MagicGradients.Animation
                 if (anim.Duration > 0)
                 {
                     finishAt = Math.Min(finishAt, beginAt + (double)anim.Duration / Duration);
+                    Debug.WriteLine($"FinishAt updated to {finishAt}");
                 }
                 animation.Add(beginAt, finishAt, anim.OnAnimate());
             }
-
+            
             return animation;
-        }
-
-        public override void OnRepeat()
-        {
-            foreach (var anim in Animations)
-            {
-                anim.OnRepeat();
-            }
         }
     }
 }

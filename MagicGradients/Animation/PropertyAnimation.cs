@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Xamarin.Forms;
 
 namespace MagicGradients.Animation
@@ -21,7 +22,19 @@ namespace MagicGradients.Animation
             SetDefaultFrom((TValue)Target.GetValue(TargetProperty));
         }
 
-        public override void OnRepeat()
+        public override Xamarin.Forms.Animation OnAnimate() => new Xamarin.Forms.Animation(x =>
+        {
+            var value = GetProgressValue(x);
+            Target.SetValue(TargetProperty, value);
+        },
+        easing: EasingHelper.GetEasing(Easing),
+        finished: () =>
+        {
+            Debug.WriteLine("Finished Property");
+            OnFinished();
+        });
+
+        protected override void OnFinished()
         {
             if (AutoReverse)
             {
@@ -30,6 +43,8 @@ namespace MagicGradients.Animation
                 To = tmp;
             }
         }
+
+        protected abstract TValue GetProgressValue(double progress);
 
         private void SetDefaultFrom(TValue value)
         {

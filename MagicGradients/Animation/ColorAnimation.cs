@@ -4,10 +4,9 @@ namespace MagicGradients.Animation
 {
     public class ColorAnimation : PropertyAnimation<Color>
     {
-        public override Xamarin.Forms.Animation OnAnimate() => new Xamarin.Forms.Animation(x =>
+        protected override Color GetProgressValue(double progress)
         {
-            var value = AnimationHelper.GetColorValue(From, To, x);
-            Target.SetValue(TargetProperty, value);
-        });
+            return AnimationHelper.GetColorValue(From, To, progress);
+        }
     }
 }

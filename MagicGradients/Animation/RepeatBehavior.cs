@@ -1,12 +1,21 @@
-﻿namespace MagicGradients.Animation
-{
-    //public struct RepeatBehavior
-    //{
-    //    public int Count { get; set; }
-    //    public RepeatBehaviorType Type { get; set; }
-    //}
+﻿using Xamarin.Forms;
 
-    public enum RepeatBehavior
+namespace MagicGradients.Animation
+{
+    [TypeConverter(typeof(RepeatBehaviorTypeConverter))]
+    public struct RepeatBehavior
+    {
+        public RepeatBehavior(RepeatBehaviorType type, int count)
+        {
+            Type = type;
+            Count = count;
+        }
+        
+        public RepeatBehaviorType Type { get; set; }
+        public int Count { get; set; }
+    }
+
+    public enum RepeatBehaviorType
     {
         Count, Forever
     }

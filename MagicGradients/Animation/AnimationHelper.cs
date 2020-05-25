@@ -23,6 +23,13 @@ namespace MagicGradients.Animation
             return Color.FromRgb(from.R + newR, from.G + newG, from.B + newB);
         }
 
+        public static Point GetPointValue(Point from, Point to, double animationProgress)
+        {
+            return new Point(
+                from.X + (to.X - from.X) * animationProgress,
+                from.Y + (to.Y - from.Y) * animationProgress);
+        }
+
         public static CornerRadius GetCornerRadiusValue(CornerRadius from, CornerRadius to, double animationProgress)
         {
             return new CornerRadius(
