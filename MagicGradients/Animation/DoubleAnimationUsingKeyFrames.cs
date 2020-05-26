@@ -1,6 +1,6 @@
 ﻿namespace MagicGradients.Animation
 {
-    public class DoubleAnimation : PropertyAnimation<double>
+    public class DoubleAnimationUsingKeyFrames : PropertyAnimationUsingKeyFrames<double>
     {
         protected override double GetProgressValue(double @from, double to, double progress)
         {

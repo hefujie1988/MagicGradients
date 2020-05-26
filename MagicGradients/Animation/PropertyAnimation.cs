@@ -24,10 +24,10 @@ namespace MagicGradients.Animation
 
         public override Xamarin.Forms.Animation OnAnimate() => new Xamarin.Forms.Animation(x =>
         {
-            var value = GetProgressValue(x);
+            var value = GetProgressValue(From, To, x);
             Target.SetValue(TargetProperty, value);
         },
-        easing: EasingHelper.GetEasing(Easing),
+        easing: Easing.ToEasing(),
         finished: () =>
         {
             Debug.WriteLine("Finished Property");
@@ -44,7 +44,7 @@ namespace MagicGradients.Animation
             }
         }
 
-        protected abstract TValue GetProgressValue(double progress);
+        protected abstract TValue GetProgressValue(TValue from, TValue to, double progress);
 
         private void SetDefaultFrom(TValue value)
         {

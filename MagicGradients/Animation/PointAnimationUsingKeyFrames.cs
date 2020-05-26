@@ -2,7 +2,7 @@
 
 namespace MagicGradients.Animation
 {
-    public class PointAnimation : PropertyAnimation<Point>
+    public class PointAnimationUsingKeyFrames : PropertyAnimationUsingKeyFrames<Point>
     {
         protected override Point GetProgressValue(Point @from, Point to, double progress)
         {

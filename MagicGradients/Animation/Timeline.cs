@@ -41,7 +41,7 @@ namespace MagicGradients.Animation
 
             Animator.Animate(Guid.NewGuid().ToString(), OnAnimate(),
                 length: Duration,
-                easing: EasingHelper.GetEasing(Easing),
+                easing: Easing.ToEasing(),
                 finished: (v, c) =>
                 {
                     Debug.WriteLine("Finished Timeline");

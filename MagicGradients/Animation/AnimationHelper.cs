@@ -14,13 +14,12 @@ namespace MagicGradients.Animation
             return from + (to - from) * animationProgress;
         }
 
-        // https://www.alanzucconi.com/2016/01/06/colour-interpolation/
         public static Color GetColorValue(Color from, Color to, double animationProgress)
         {
-            var newR = (to.R - from.R) * animationProgress;
-            var newG = (to.G - from.G) * animationProgress;
-            var newB = (to.B - from.B) * animationProgress;
-            return Color.FromRgb(from.R + newR, from.G + newG, from.B + newB);
+            return Color.FromRgb(
+                from.R + (to.R - from.R) * animationProgress, 
+                from.G + (to.G - from.G) * animationProgress, 
+                from.B + (to.B - from.B) * animationProgress);
         }
 
         public static Point GetPointValue(Point from, Point to, double animationProgress)
@@ -46,6 +45,52 @@ namespace MagicGradients.Animation
                 from.Top + (to.Top - from.Top) * animationProgress,
                 from.Right + (to.Right - from.Right) * animationProgress,
                 from.Bottom + (to.Bottom - from.Bottom) * animationProgress);
+        }
+    }
+
+    public static class AnimationExtensions
+    {
+        public static int Tween(this int from, int to, double progress)
+        {
+            return (int)(from + (to - from) * progress);
+        }
+
+        public static double Tween(this double from, double to, double progress)
+        {
+            return from + (to - from) * progress;
+        }
+
+        public static Color Tween(this Color from, Color to, double progress)
+        {
+            return Color.FromRgb(
+                from.R + (to.R - from.R) * progress,
+                from.G + (to.G - from.G) * progress,
+                from.B + (to.B - from.B) * progress);
+        }
+
+        public static Point Tween(this Point from, Point to, double progress)
+        {
+            return new Point(
+                from.X + (to.X - from.X) * progress,
+                from.Y + (to.Y - from.Y) * progress);
+        }
+
+        public static CornerRadius Tween(this CornerRadius from, CornerRadius to, double progress)
+        {
+            return new CornerRadius(
+                from.TopLeft + (to.TopLeft - from.TopLeft) * progress,
+                from.TopRight + (to.TopRight - from.TopRight) * progress,
+                from.BottomLeft + (to.BottomLeft - from.BottomLeft) * progress,
+                from.BottomRight + (to.BottomRight - from.BottomRight) * progress);
+        }
+
+        public static Thickness Tween(this Thickness from, Thickness to, double progress)
+        {
+            return new Thickness(
+                from.Left + (to.Left - from.Left) * progress,
+                from.Top + (to.Top - from.Top) * progress,
+                from.Right + (to.Right - from.Right) * progress,
+                from.Bottom + (to.Bottom - from.Bottom) * progress);
         }
     }
 }

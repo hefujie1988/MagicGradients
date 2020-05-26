@@ -2,7 +2,7 @@
 
 namespace MagicGradients.Animation
 {
-    public class ColorAnimation : PropertyAnimation<Color>
+    public class ColorAnimationUsingKeyFrames : PropertyAnimationUsingKeyFrames<Color>
     {
         protected override Color GetProgressValue(Color @from, Color to, double progress)
         {
